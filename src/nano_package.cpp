@@ -1,3 +1,11 @@
+//
+//    FILE: nano_package.cpp
+//  AUTHOR: James Kyle S. Balolong
+// PURPOSE: Nano packaging 2 jars at a time.
+//     URL: https://github.com/Jamsekun/Arduino-nano-packaging/blob/main/src/nano_package.cpp
+// COMMENTS:
+// CODE INSPIRATION: their group project is inspired by https://www.youtube.com/watch?v=26YH8Mtsxzg&t=1107s
+
 #include <Arduino.h>
 #include <Wire.h>
 #include "HX711.h"
@@ -25,7 +33,7 @@ uint8_t clockPin = A5;
 
 //---------------servo------------
 Servo hopper;
-const int hopperServopin = 11;
+const int hopperServopin = 11; // servo signal to ng mg996r model
 
 float val_hopper = 20;
 float val_hopperFiltered = 20;
@@ -45,18 +53,18 @@ unsigned long previousPackagingMillis = 0;
 unsigned long previousCappingMillis = 0;
 unsigned long previousHopperMillis = 0;
 //-------------------------------
-const int sensor1 = 7;
+const int sensor1 = 7; // signal ng sensor na initial position, it ust detect the initial position
 int sensor1Flag = 0;
-const int sensor2 = 8;
+const int sensor2 = 8; // pandetect ng jar sa hopper, near the servo hopper
 int sensor2Flag = 0;
-const int sensor3 = 9;
+const int sensor3 = 9; // pandetect ng jar near sa capping.
 int sensor3Flag = 0;
 
 int led = A1;
 // int w_pump = 12;
 int a_pump = 2; // air solenoid tlga to
-int cap_m = 5;
-int conv = 6;
+int cap_m = 5;  // capping relay
+int conv = 6;   // conyeyor 12Vdc motor
 int buzzer = 10;
 
 // Variable to keep track of loop count
@@ -150,11 +158,14 @@ void loop()
       // loopCount = 4;
     }
 
+    //------------auto start for testing purposes---------------
+    // comment out this code kapag nakaconnect na sa arduino mega
     if (autoStart && autoStartFlag == 0)
     {
       state = 1;
       autoStartFlag = 1;
     }
+    //---------------------------------------------------------
 
     // naka input pull up. hopper fill
     if (sensor2 == HIGH && sensor2Flag == 0)
